@@ -1,17 +1,5 @@
 Ahk2*
 error.log
-*.log
-
-# Windows
-Thumbs.db
-Desktop.ini
-
-# AutoHotkey
-*.exe
-!hotkey_reference.html
-
-# Editor
-.vscode/
 
 # GlazeWM
-glazewm/errors.log
+glazewm/errors.log

@@ -10,8 +10,9 @@
 ; CONFIGURATION
 ; ============================================================================
 
-ICON_PATH := "D:\dev\ui_elements\icons\code.ico"
+ICON_PATH := A_ScriptDir . "\code.ico"
 SQL_BAT_PATH := "D:\dev\tweeks\sql_run.bat"
+
 
 if FileExist(ICON_PATH)
     TraySetIcon(ICON_PATH)
