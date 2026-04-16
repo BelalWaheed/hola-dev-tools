@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Hotkeys</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f5f4;
+    --bg-tertiary: #efefed;
+    --bg-info: #e6f1fb;
+    --bg-success: #eaf3de;
+    --bg-warning: #faeeda;
+    --text-primary: #1a1a18;
+    --text-secondary: #6b6b67;
+    --text-tertiary: #9e9e99;
+    --text-info: #185fa5;
+    --text-success: #3b6d11;
+    --text-warning: #854f0b;
+    --border-tertiary: rgba(0,0,0,0.10);
+    --border-secondary: rgba(0,0,0,0.18);
+    --border-primary: rgba(0,0,0,0.25);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-primary: #1e1e1c;
+      --bg-secondary: #2a2a28;
+      --bg-tertiary: #333330;
+      --bg-info: #042c53;
+      --bg-success: #173404;
+      --bg-warning: #412402;
+      --text-primary: #f0efea;
+      --text-secondary: #a8a8a2;
+      --text-tertiary: #6b6b67;
+      --text-info: #85b7eb;
+      --text-success: #97c459;
+      --text-warning: #ef9f27;
+      --border-tertiary: rgba(255,255,255,0.10);
+      --border-secondary: rgba(255,255,255,0.18);
+      --border-primary: rgba(255,255,255,0.25);
+    }
+  }
+
+  body { font-family: var(--font-sans); background: var(--bg-tertiary); color: var(--text-primary); min-height: 100vh; }
+
+  .app { padding: 1.25rem; max-width: 920px; margin: 0 auto; }
+
+  .topbar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .topbar h1 { font-size: 15px; font-weight: 500; flex: 1; min-width: 120px; color: var(--text-primary); }
+
+  input[type=search] {
+    flex: 1; min-width: 150px; max-width: 260px; height: 33px; padding: 0 11px;
+    font-size: 13px; border-radius: var(--radius-md); border: 0.5px solid var(--border-secondary);
+    background: var(--bg-primary); color: var(--text-primary); outline: none;
+  }
+  input[type=search]:focus { box-shadow: 0 0 0 2px var(--text-info); }
+
+  .tabs { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tab {
+    padding: 4px 13px; font-size: 12px; border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-secondary); background: transparent;
+    color: var(--text-secondary); cursor: pointer; transition: all .15s;
+  }
+  .tab.active { background: var(--text-primary); color: var(--bg-primary); border-color: var(--text-primary); }
+  .tab:hover:not(.active) { background: var(--bg-secondary); }
+
+  .add-btn {
+    height: 33px; padding: 0 13px; font-size: 12px; border-radius: var(--radius-md);
+    border: 0.5px solid var(--border-secondary); background: transparent;
+    color: var(--text-primary); cursor: pointer;
+  }
+  .add-btn:hover { background: var(--bg-secondary); }
+
+  .section-label {
+    font-size: 10px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--text-tertiary); margin: 1.2rem 0 .55rem;
+    padding-bottom: 4px; border-bottom: 0.5px solid var(--border-tertiary);
+  }
+  .sub-label { font-size: 11px; color: var(--text-tertiary); margin: .5rem 0 .35rem; font-style: italic; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 8px; }
+
+  .card {
+    background: var(--bg-primary); border: 0.5px solid var(--border-tertiary);
+    border-radius: var(--radius-lg); padding: 10px 12px;
+    display: flex; align-items: center; gap: 9px; position: relative;
+    transition: border-color .12s;
+  }
+  .card:hover { border-color: var(--border-secondary); }
+  .card:hover .cact { opacity: 1; }
+
+  .keys { display: flex; align-items: center; gap: 3px; flex-shrink: 0; flex-wrap: wrap; max-width: 195px; }
+  .key {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 2px 6px; font-size: 11px; font-weight: 500;
+    background: var(--bg-secondary); border: 0.5px solid var(--border-primary);
+    border-radius: 4px; color: var(--text-primary); white-space: nowrap;
+    font-family: var(--font-mono); line-height: 1.5;
+  }
+  .plus { font-size: 9px; color: var(--text-tertiary); margin: 0 1px; }
+  .slash { font-size: 9px; color: var(--text-tertiary); margin: 0 2px; }
+
+  .desc { font-size: 12px; color: var(--text-secondary); flex: 1; line-height: 1.4; }
+
+  .cact { opacity: 0; display: flex; gap: 3px; transition: opacity .12s; flex-shrink: 0; margin-left: 4px; }
+  .ib {
+    width: 22px; height: 22px; border: none; background: none; cursor: pointer;
+    color: var(--text-tertiary); border-radius: 3px;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; padding: 0;
+  }
+  .ib:hover { background: var(--bg-secondary); color: var(--text-primary); }
+
+  .empty { text-align: center; padding: 3rem; color: var(--text-tertiary); font-size: 13px; }
+
+  .modal-bg {
+    position: fixed; inset: 0; background: rgba(0,0,0,.45);
+    display: flex; align-items: center; justify-content: center; z-index: 100;
+  }
+  .modal {
+    background: var(--bg-primary); border: 0.5px solid var(--border-secondary);
+    border-radius: var(--radius-lg); padding: 1.2rem; width: 330px; max-width: 95vw;
+  }
+  .modal h2 { font-size: 14px; font-weight: 500; margin-bottom: .9rem; color: var(--text-primary); }
+  .field { margin-bottom: 10px; }
+  .field label { display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; }
+  .field input, .field select {
+    width: 100%; height: 32px; padding: 0 9px; font-size: 12px;
+    border-radius: var(--radius-md); border: 0.5px solid var(--border-secondary);
+    background: var(--bg-primary); color: var(--text-primary); outline: none;
+  }
+  .field input:focus, .field select:focus { box-shadow: 0 0 0 2px var(--text-info); }
+  .hint { font-size: 10px; color: var(--text-tertiary); margin-top: 3px; }
+  .mfooter { display: flex; justify-content: flex-end; gap: 7px; margin-top: .9rem; }
+  .bcn {
+    padding: 5px 14px; font-size: 12px; border: 0.5px solid var(--border-secondary);
+    border-radius: var(--radius-md); background: none; color: var(--text-secondary); cursor: pointer;
+  }
+  .bsv {
+    padding: 5px 14px; font-size: 12px; border: none; border-radius: var(--radius-md);
+    background: var(--text-primary); color: var(--bg-primary); cursor: pointer; font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="topbar">
+    <h1>My Hotkeys</h1>
+    <input type="search" placeholder="Search…" id="sq" />
+    <div class="tabs" id="tabs"></div>
+    <button class="add-btn" onclick="openM()">+ Add</button>
+  </div>
+  <div id="list"></div>
+</div>
+
+<div id="modal" style="display:none" class="modal-bg">
+  <div class="modal">
+    <h2 id="mt">Add hotkey</h2>
+    <div class="field">
+      <label>Keys (e.g. Alt+Shift+H)</label>
+      <input id="fk" />
+      <p class="hint">Separate keys with + · Use: Alt, Ctrl, Shift, Win · Separate alts with /</p>
+    </div>
+    <div class="field"><label>Description</label><input id="fd" /></div>
+    <div class="field">
+      <label>Category</label>
+      <select id="fc">
+        <option>GlazeWM</option><option>AHK</option><option>System</option><option>Custom</option>
+      </select>
+    </div>
+    <div class="mfooter">
+      <button class="bcn" onclick="closeM()">Cancel</button>
+      <button class="bsv" onclick="saveM()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let editId = null, activeTab = 'All', nid = 200;
+
+let data = [
+  {id:1,  keys:'Alt+Left',              desc:'Focus window left',                  cat:'GlazeWM', group:'Focus'},
+  {id:2,  keys:'Alt+Right',             desc:'Focus window right',                 cat:'GlazeWM', group:'Focus'},
+  {id:3,  keys:'Alt+K',                 desc:'Focus window up',                    cat:'GlazeWM', group:'Focus'},
+  {id:4,  keys:'Alt+J',                 desc:'Focus window down',                  cat:'GlazeWM', group:'Focus'},
+  {id:5,  keys:'Alt+Shift+H / Alt+Shift+Left',  desc:'Move window left',           cat:'GlazeWM', group:'Move'},
+  {id:6,  keys:'Alt+Shift+L / Alt+Shift+Right', desc:'Move window right',          cat:'GlazeWM', group:'Move'},
+  {id:7,  keys:'Alt+Shift+K',           desc:'Move window up',                     cat:'GlazeWM', group:'Move'},
+  {id:8,  keys:'Alt+Shift+J',           desc:'Move window down',                   cat:'GlazeWM', group:'Move'},
+  {id:9,  keys:'Alt+[',                 desc:'Resize width +2%',                   cat:'GlazeWM', group:'Resize'},
+  {id:10, keys:'Alt+]',                 desc:'Resize width -2%',                   cat:'GlazeWM', group:'Resize'},
+  {id:11, keys:'Alt+;',                 desc:'Resize height +2%',                  cat:'GlazeWM', group:'Resize'},
+  {id:12, keys:"Alt+'",                 desc:'Resize height -2%',                  cat:'GlazeWM', group:'Resize'},
+  {id:13, keys:'Alt+V',                 desc:'Toggle tiling direction',            cat:'GlazeWM', group:'Window'},
+  {id:14, keys:'Alt+Space',             desc:'Cycle focus',                        cat:'GlazeWM', group:'Window'},
+  {id:15, keys:'Alt+Shift+Space',       desc:'Toggle floating (centered)',         cat:'GlazeWM', group:'Window'},
+  {id:16, keys:'Alt+T',                 desc:'Toggle tiling',                      cat:'GlazeWM', group:'Window'},
+  {id:17, keys:'Alt+F',                 desc:'Toggle fullscreen',                  cat:'GlazeWM', group:'Window'},
+  {id:18, keys:'Alt+M',                 desc:'Toggle minimized',                   cat:'GlazeWM', group:'Window'},
+  {id:19, keys:'Alt+Q',                 desc:'Close focused window',               cat:'GlazeWM', group:'Window'},
+  {id:20, keys:'Alt+1',                 desc:'Focus workspace 1',                  cat:'GlazeWM', group:'Workspace'},
+  {id:21, keys:'Alt+2',                 desc:'Focus workspace 2',                  cat:'GlazeWM', group:'Workspace'},
+  {id:22, keys:'Alt+3',                 desc:'Focus workspace 3',                  cat:'GlazeWM', group:'Workspace'},
+  {id:23, keys:'Alt+A',                 desc:'Focus prev active workspace',        cat:'GlazeWM', group:'Workspace'},
+  {id:24, keys:'Alt+E',                 desc:'Focus recent workspace',             cat:'GlazeWM', group:'Workspace'},
+  {id:25, keys:'Alt+Shift+1',           desc:'Move window → workspace 1',         cat:'GlazeWM', group:'Workspace'},
+  {id:26, keys:'Alt+Shift+2',           desc:'Move window → workspace 2',         cat:'GlazeWM', group:'Workspace'},
+  {id:27, keys:'Alt+Shift+3',           desc:'Move window → workspace 3',         cat:'GlazeWM', group:'Workspace'},
+  {id:28, keys:'Alt+Shift+A',           desc:'Move workspace left',               cat:'GlazeWM', group:'Workspace'},
+  {id:29, keys:'Alt+Shift+F',           desc:'Move workspace right',              cat:'GlazeWM', group:'Workspace'},
+  {id:30, keys:'Alt+Shift+D',           desc:'Move workspace up',                 cat:'GlazeWM', group:'Workspace'},
+  {id:31, keys:'Alt+Shift+S',           desc:'Move workspace down',               cat:'GlazeWM', group:'Workspace'},
+  {id:32, keys:'Alt+Shift+R',           desc:'Reload GlazeWM config',             cat:'GlazeWM', group:'WM'},
+  {id:33, keys:'Alt+Shift+W',           desc:'Redraw windows',                    cat:'GlazeWM', group:'WM'},
+  {id:34, keys:'Alt+/',                 desc:'Open PowerShell (pwsh)',             cat:'GlazeWM', group:'WM'},
+  {id:40, keys:'LAlt+RAlt',             desc:'Suspend / resume AHK',              cat:'AHK',     group:'Toggle'},
+  {id:41, keys:'Alt+S',                 desc:'Google search selected text',       cat:'AHK',     group:'Search'},
+  {id:42, keys:'Alt+N',                 desc:'NPM search selected text',          cat:'AHK',     group:'Search'},
+  {id:43, keys:'Alt+G',                 desc:'GitHub code search selected text',  cat:'AHK',     group:'Search'},
+  {id:44, keys:'Alt+F1',               desc:'Run SQL batch as admin',             cat:'AHK',     group:'Dev'},
+  {id:45, keys:'Ctrl+Alt+3',           desc:'Open localhost:3000',               cat:'AHK',     group:'Dev'},
+  {id:46, keys:'Ctrl+Alt+5',           desc:'Open localhost:5173',               cat:'AHK',     group:'Dev'},
+  {id:47, keys:'Ctrl+Alt+8',           desc:'Open localhost:8080',               cat:'AHK',     group:'Dev'},
+  {id:48, keys:'Ctrl+Shift+X',         desc:'Select all occurrences (→ Ctrl+Shift+L)', cat:'AHK', group:'Text'},
+  {id:49, keys:'Alt+W',                desc:'Wrap selection in console.log()',   cat:'AHK',     group:'Text'},
+];
+
+function parseKeys(s) {
+  return s.split('/').map((p, pi, arr) => {
+    const keys = p.trim().split('+').map(k => k.trim()).filter(Boolean);
+    const rendered = keys.map((k, i) => {
+      const sym = {Win:'⊞',Ctrl:'Ctrl',Alt:'Alt',Shift:'⇧',Space:'Spc',Tab:'Tab',
+        Enter:'↵',Esc:'Esc',Left:'←',Right:'→',Up:'↑',Down:'↓',
+        LAlt:'L-Alt',RAlt:'R-Alt'}[k] || k;
+      return `<span class="key">${sym}</span>${i < keys.length - 1 ? '<span class="plus">+</span>' : ''}`;
+    }).join('');
+    return rendered + (pi < arr.length - 1 ? '<span class="slash"> / </span>' : '');
+  }).join('');
+}
+
+function getTabs() { return ['All', ...new Set(data.map(d => d.cat))]; }
+
+function renderTabs() {
+  document.getElementById('tabs').innerHTML = getTabs().map(t =>
+    `<button class="tab${t === activeTab ? ' active' : ''}" onclick="setTab('${t}')">${t}</button>`
+  ).join('');
+}
+
+function setTab(t) { activeTab = t; renderTabs(); renderList(); }
+
+function card(d) {
+  return `<div class="card">
+    <div class="keys">${parseKeys(d.keys)}</div>
+    <div class="desc">${d.desc}</div>
+    <div class="cact">
+      <button class="ib" onclick="openM(${d.id})" title="Edit">✎</button>
+      <button class="ib" onclick="del(${d.id})" title="Delete">✕</button>
+    </div>
+  </div>`;
+}
+
+function renderList() {
+  const q = document.getElementById('sq').value.toLowerCase();
+  const items = data.filter(d => {
+    const mt = activeTab === 'All' || d.cat === activeTab;
+    const mq = !q || d.keys.toLowerCase().includes(q) || d.desc.toLowerCase().includes(q);
+    return mt && mq;
+  });
+
+  const el = document.getElementById('list');
+  if (!items.length) { el.innerHTML = '<div class="empty">No shortcuts found</div>'; return; }
+
+  if (activeTab === 'All') {
+    const byCat = {};
+    items.forEach(d => {
+      if (!byCat[d.cat]) byCat[d.cat] = {};
+      if (!byCat[d.cat][d.group]) byCat[d.cat][d.group] = [];
+      byCat[d.cat][d.group].push(d);
+    });
+    let html = '';
+    for (const cat in byCat) {
+      html += `<div class="section-label">${cat}</div>`;
+      for (const grp in byCat[cat]) {
+        if (Object.keys(byCat[cat]).length > 1)
+          html += `<div class="sub-label">${grp}</div>`;
+        html += `<div class="grid">` + byCat[cat][grp].map(card).join('') + `</div>`;
+      }
+    }
+    el.innerHTML = html;
+  } else {
+    const byGrp = {};
+    items.forEach(d => { if (!byGrp[d.group]) byGrp[d.group] = []; byGrp[d.group].push(d); });
+    let html = '';
+    for (const grp in byGrp)
+      html += `<div class="section-label">${grp}</div><div class="grid">` + byGrp[grp].map(card).join('') + `</div>`;
+    el.innerHTML = html;
+  }
+}
+
+function openM(id) {
+  editId = id || null;
+  document.getElementById('mt').textContent = id ? 'Edit hotkey' : 'Add hotkey';
+  if (id) {
+    const d = data.find(x => x.id === id);
+    document.getElementById('fk').value = d.keys;
+    document.getElementById('fd').value = d.desc;
+    document.getElementById('fc').value = d.cat;
+  } else {
+    document.getElementById('fk').value = '';
+    document.getElementById('fd').value = '';
+    document.getElementById('fc').value = 'GlazeWM';
+  }
+  document.getElementById('modal').style.display = 'flex';
+  setTimeout(() => document.getElementById('fk').focus(), 40);
+}
+
+function closeM() { document.getElementById('modal').style.display = 'none'; editId = null; }
+
+function saveM() {
+  const k = document.getElementById('fk').value.trim();
+  const desc = document.getElementById('fd').value.trim();
+  const cat = document.getElementById('fc').value;
+  if (!k || !desc) return;
+  if (editId) {
+    const d = data.find(x => x.id === editId);
+    d.keys = k; d.desc = desc; d.cat = cat;
+  } else {
+    data.push({ id: nid++, keys: k, desc, cat, group: 'Custom' });
+  }
+  closeM(); renderTabs(); renderList();
+}
+
+function del(id) { data = data.filter(x => x.id !== id); renderTabs(); renderList(); }
+
+document.getElementById('sq').addEventListener('input', renderList);
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeM(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeM(); });
+
+renderTabs();
+renderList();
+</script>
+</body>
+</html>
