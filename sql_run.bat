@@ -1,0 +1,9 @@
+@echo off
+echo Starting the database engine...
+net start "MSSQLSERVER"
+
+echo Launching the database client...
+start "" /wait "C:\Program Files\Microsoft SQL Server Management Studio 22\Release\Common7\IDE\SSMS.exe"
+
+echo Client closed. Stopping the database engine...
+net stop "MSSQLSERVER"

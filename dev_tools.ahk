@@ -11,7 +11,7 @@
 ; ============================================================================
 
 ICON_PATH := A_ScriptDir . "\code.ico"
-SQL_BAT_PATH := "D:\dev\tweeks\sql_run.bat"
+SQL_BAT_PATH := A_ScriptDir . "\sql_run.bat"
 
 
 if FileExist(ICON_PATH)

@@ -20,10 +20,23 @@ Personal developer environment configuration and productivity suite. This reposi
 | **`Alt + G`**          | Search GitHub (Code) for selected text   |
 | **`Alt + W`**          | Wrap selected text in `console.log(...)` |
 | **`Ctrl + Shift + X`** | Select all occurrences (vs-code style)   |
-| **`Alt + F1`**         | Run SQL Batch File (Administrator)       |
 | **`Ctrl + Alt + 3`**   | Open `http://localhost:3000`             |
 | **`Ctrl + Alt + 5`**   | Open `http://localhost:5173`             |
 | **`Ctrl + Alt + 8`**   | Open `http://localhost:8080`             |
+| **`Alt + F1`**         | SQL Automation (Start/SSMS/Stop)         |
+
+---
+
+## SQL Automation Tool (`sql_run.bat`)
+
+The **Alt + F1** hotkey triggers a coordinated database development workflow designed to save system resources:
+
+1.  **Starts SQL Service**: Automatically starts the `MSSQLSERVER` Windows service.
+2.  **Launches SSMS**: Opens SQL Server Management Studio and waits for you to finish your work.
+3.  **Stops SQL Service**: Once SSMS is closed, it stops the service to free up system resources.
+
+> [!IMPORTANT]
+> This hotkey requires **Administrator privileges** to start/stop Windows services. If the script isn't running as Admin, you will see a UAC prompt.
 
 ---
 
