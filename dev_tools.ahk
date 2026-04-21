@@ -21,7 +21,6 @@ A_MaxHotkeysPerInterval := 2000
 ProcessSetPriority("H")
 A_MenuMaskKey := "vk07"
 
-
 ; ============================================================================
 ; SECTION 1: ALT MENU ACCELERATION DISABLER
 ; ============================================================================
@@ -106,3 +105,45 @@ TransformSelected(transformFn) {
 
 ; Alt+W — Wrap selected text in console.log('...')
 !w:: TransformSelected((t) => "console.log(" . t . ")")
+
+
+
+; ==============================================================================
+; CONTEXT SENSITIVITY
+; Only triggers if NOT hovering over a text input (I-Beam cursor).
+; ==============================================================================
+
+#HotIf A_Cursor != "IBeam"
+
+^Right::AdjustVolume(8)   ; Increase by 8
+^Left::AdjustVolume(-8)   ; Decrease by 8
+
+#HotIf
+
+; ==============================================================================
+; CORE LOGIC: Volume Adjustment & Clamping
+; ==============================================================================
+
+AdjustVolume(delta)
+{
+    try {
+        ; 1. Get current volume
+        currentVol := SoundGetVolume()
+        
+        ; 2. Calculate new volume and CLAMP it between 0 and 100
+        ; Min(val, 100) ensures it never exceeds 100
+        ; Max(0, val) ensures it never drops below 0
+        newVol := Max(0, Min(100, currentVol + delta))
+        
+        ; 3. Apply the new volume
+        SoundSetVolume(newVol)
+        
+        ; 4. Visual Feedback
+        ToolTip("Volume: " . Round(newVol) . "%")
+        SetTimer(() => ToolTip(), -1500)
+        
+    } catch Error as e {
+        ToolTip("Audio Error: " . e.Message)
+        SetTimer(() => ToolTip(), -3000)
+    }
+}
